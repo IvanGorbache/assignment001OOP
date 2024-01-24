@@ -12,6 +12,7 @@ public class GameLogic implements PlayableLogic{
     private Stack<ConcretePiece[][]> history;
     private Stack<ConcretePiece> attackHistory;
     private Stack<ConcretePiece> piecesHistory;
+    private Stack<Position> positionsHistory;
     private boolean secondPlayerTurn;
     private boolean isGameOver;
 
@@ -31,6 +32,7 @@ public class GameLogic implements PlayableLogic{
         history = new Stack<>();
         attackHistory = new Stack<>();
         piecesHistory = new Stack<>();
+        positionsHistory = new Stack<>();
         uniqueSteps = new Position[getBoardSize()][getBoardSize()];
         board = new ConcretePiece[getBoardSize()][getBoardSize()];
         board[3][0] = new Pawn("A1", playerTwoAttack, new Position(3,0));
@@ -129,7 +131,14 @@ public class GameLogic implements PlayableLogic{
             {
                 uniqueSteps[b.getX()][b.getY()] = new Position(b);
             }
-            uniqueSteps[b.getX()][b.getY()].addUniquePieces(board[b.getX()][b.getY()]);
+            if(uniqueSteps[b.getX()][b.getY()].addUniquePieces(board[b.getX()][b.getY()]))
+            {
+                positionsHistory.add(uniqueSteps[b.getX()][b.getY()]);
+            }
+            else
+            {
+                positionsHistory.add(null);
+            }
             if(getPieceAtPosition(b) instanceof Pawn)
             {
                 checkKill(b);
@@ -337,8 +346,11 @@ public class GameLogic implements PlayableLogic{
         }
         if(!attackHistory.isEmpty())
         {
-            attackHistory.pop();
-            if(!attackHistory.isEmpty())
+            if(attackHistory.peek()==null)
+            {
+                attackHistory.pop();
+            }
+            else
             {
                 while (attackHistory.peek()!=null)
                 {
@@ -349,6 +361,13 @@ public class GameLogic implements PlayableLogic{
         if(!piecesHistory.isEmpty())
         {
             piecesHistory.pop().removeLastMove();
+        }
+        if(!positionsHistory.isEmpty())
+        {
+            if(positionsHistory.peek() != null)
+            {
+                positionsHistory.pop().removePiece();
+            }
         }
     }
     private void printStatistics()
