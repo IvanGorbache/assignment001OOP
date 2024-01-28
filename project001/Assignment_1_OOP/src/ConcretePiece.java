@@ -3,14 +3,17 @@ import java.util.Stack;
 public abstract class ConcretePiece implements Piece{
 
     private final String name;
+
+    private final int id;
     private final String type;
     private final Player owner;
     private int distanceTraveled;
     private final Stack<Position> moveHistory;
 
-    public ConcretePiece(String newName, String newType, Player newOwner, Position startingPos)
+    public ConcretePiece(String newName, int newId, String newType, Player newOwner, Position startingPos)
     {
         this.name = newName;
+        this.id =newId;
         this.type = newType;
         this.owner = newOwner;
         this.moveHistory = new Stack<>();
@@ -26,7 +29,7 @@ public abstract class ConcretePiece implements Piece{
         return this.type;
     }
     public String getName() {
-        return this.name;
+        return this.name+this.id;
     }
     public void addMove(Position pos)
     {
@@ -62,4 +65,7 @@ public abstract class ConcretePiece implements Piece{
         return this.moveHistory;
     }
 
+    public int getId() {
+        return id;
+    }
 }

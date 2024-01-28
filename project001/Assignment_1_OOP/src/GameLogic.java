@@ -35,43 +35,43 @@ public class GameLogic implements PlayableLogic{
         positionsHistory = new Stack<>();
         uniqueSteps = new Position[getBoardSize()][getBoardSize()];
         board = new ConcretePiece[getBoardSize()][getBoardSize()];
-        board[3][0] = new Pawn("A1", playerTwoAttack, new Position(3,0));
-        board[4][0] = new Pawn("A2", playerTwoAttack, new Position(4,0));
-        board[5][0] = new Pawn("A3", playerTwoAttack, new Position(5,0));
-        board[6][0] = new Pawn("A4", playerTwoAttack, new Position(6,0));
-        board[7][0] = new Pawn("A5", playerTwoAttack, new Position(7,0));
-        board[5][1] = new Pawn("A6", playerTwoAttack, new Position(5,1));
-        board[0][3] = new Pawn("A7", playerTwoAttack, new Position(0,3));
-        board[10][3] = new Pawn("A8", playerTwoAttack, new Position(10,3));
-        board[0][4] = new Pawn("A9", playerTwoAttack, new Position(0,4));
-        board[10][4] = new Pawn("A10", playerTwoAttack, new Position(10,4));
-        board[0][5] = new Pawn("A11", playerTwoAttack, new Position(0,5));
-        board[1][5] = new Pawn("A12", playerTwoAttack, new Position(1,5));
-        board[9][5] = new Pawn("A13", playerTwoAttack, new Position(9,5));
-        board[10][5] = new Pawn("A14", playerTwoAttack, new Position(10,5));
-        board[0][6] = new Pawn("A15", playerTwoAttack, new Position(0,6));
-        board[10][6] = new Pawn("A16", playerTwoAttack, new Position(10,6));
-        board[0][7] = new Pawn("A17", playerTwoAttack, new Position(0,7));
-        board[10][7] = new Pawn("A18", playerTwoAttack, new Position(10,7));
-        board[5][9] = new Pawn("A19", playerTwoAttack, new Position(5,9));
-        board[3][10] = new Pawn("A20", playerTwoAttack, new Position(3,10));
-        board[4][10] = new Pawn("A21", playerTwoAttack, new Position(4,10));
-        board[5][10] = new Pawn("A22", playerTwoAttack, new Position(5,10));
-        board[6][10] = new Pawn("A23", playerTwoAttack, new Position(6,10));
-        board[7][10] = new Pawn("A24", playerTwoAttack, new Position(7,10));
-        board[5][3] = new Pawn("D1", playerOneDefend, new Position(5,3));
-        board[4][4] = new Pawn("D2", playerOneDefend, new Position(4,4));
-        board[5][4] = new Pawn("D3", playerOneDefend, new Position(5,4));
-        board[6][4] = new Pawn("D4", playerOneDefend, new Position(6,4));
-        board[3][5] = new Pawn("D5", playerOneDefend, new Position(3,5));
-        board[4][5] = new Pawn("D6", playerOneDefend, new Position(4,5));
-        board[5][5] = new King("K7", playerOneDefend, new Position(5,5));
-        board[6][5] = new Pawn("D8", playerOneDefend, new Position(6,5));
-        board[7][5] = new Pawn("D9", playerOneDefend, new Position(7,5));
-        board[4][6] = new Pawn("D10", playerOneDefend, new Position(4,6));
-        board[5][6] = new Pawn("D11", playerOneDefend, new Position(5,6));
-        board[6][6] = new Pawn("D12", playerOneDefend, new Position(6,6));
-        board[5][7] = new Pawn("D13", playerOneDefend, new Position(5,7));
+        board[3][0] = new Pawn("A",1, playerTwoAttack, new Position(3,0));
+        board[4][0] = new Pawn("A",2,  playerTwoAttack, new Position(4,0));
+        board[5][0] = new Pawn("A",3, playerTwoAttack, new Position(5,0));
+        board[6][0] = new Pawn("A", 4,playerTwoAttack, new Position(6,0));
+        board[7][0] = new Pawn("A", 5,playerTwoAttack, new Position(7,0));
+        board[5][1] = new Pawn("A", 6,playerTwoAttack, new Position(5,1));
+        board[0][3] = new Pawn("A", 7,playerTwoAttack, new Position(0,3));
+        board[10][3] = new Pawn("A", 8,playerTwoAttack, new Position(10,3));
+        board[0][4] = new Pawn("A", 9,playerTwoAttack, new Position(0,4));
+        board[10][4] = new Pawn("A", 10,playerTwoAttack, new Position(10,4));
+        board[0][5] = new Pawn("A", 11,playerTwoAttack, new Position(0,5));
+        board[1][5] = new Pawn("A", 12,playerTwoAttack, new Position(1,5));
+        board[9][5] = new Pawn("A", 13,playerTwoAttack, new Position(9,5));
+        board[10][5] = new Pawn("A", 14,playerTwoAttack, new Position(10,5));
+        board[0][6] = new Pawn("A", 15,playerTwoAttack, new Position(0,6));
+        board[10][6] = new Pawn("A", 16,playerTwoAttack, new Position(10,6));
+        board[0][7] = new Pawn("A", 17,playerTwoAttack, new Position(0,7));
+        board[10][7] = new Pawn("A", 18,playerTwoAttack, new Position(10,7));
+        board[5][9] = new Pawn("A", 19,playerTwoAttack, new Position(5,9));
+        board[3][10] = new Pawn("A", 20,playerTwoAttack, new Position(3,10));
+        board[4][10] = new Pawn("A", 21,playerTwoAttack, new Position(4,10));
+        board[5][10] = new Pawn("A", 22,playerTwoAttack, new Position(5,10));
+        board[6][10] = new Pawn("A", 23,playerTwoAttack, new Position(6,10));
+        board[7][10] = new Pawn("A", 24,playerTwoAttack, new Position(7,10));
+        board[5][3] = new Pawn("D",1, playerOneDefend, new Position(5,3));
+        board[4][4] = new Pawn("D",2, playerOneDefend, new Position(4,4));
+        board[5][4] = new Pawn("D", 3,playerOneDefend, new Position(5,4));
+        board[6][4] = new Pawn("D", 4,playerOneDefend, new Position(6,4));
+        board[3][5] = new Pawn("D", 5,playerOneDefend, new Position(3,5));
+        board[4][5] = new Pawn("D", 6,playerOneDefend, new Position(4,5));
+        board[5][5] = new King("K", 7,playerOneDefend, new Position(5,5));
+        board[6][5] = new Pawn("D", 8,playerOneDefend, new Position(6,5));
+        board[7][5] = new Pawn("D", 9,playerOneDefend, new Position(7,5));
+        board[4][6] = new Pawn("D", 10,playerOneDefend, new Position(4,6));
+        board[5][6] = new Pawn("D", 11,playerOneDefend, new Position(5,6));
+        board[6][6] = new Pawn("D", 12,playerOneDefend, new Position(6,6));
+        board[5][7] = new Pawn("D", 13,playerOneDefend, new Position(5,7));
         getAllPieces();
         getAllPositionsStart();
     }
@@ -238,12 +238,6 @@ public class GameLogic implements PlayableLogic{
                 if ((getPieceAtPosition(target) instanceof Pawn) && (isPawnSurrounded(target, attacker))) {
                     ((Pawn)getPieceAtPosition(attacker)).modifyKillCounter(true);
                     attackHistory.add(this.board[attacker.getX()][attacker.getY()]);
-                    Position pos = getOppositePosition(attacker, target);
-                    if(inMapRange(pos) && getPieceAtPosition(pos)!=null)
-                    {
-                        ((Pawn)getPieceAtPosition(pos)).modifyKillCounter(true);
-                        attackHistory.add(this.board[pos.getX()][pos.getY()]);
-                    }
                     if(secondPlayerTurn)
                     {
                         attackerCount--;
@@ -436,15 +430,7 @@ public class GameLogic implements PlayableLogic{
             }
             else if(obj1.getMoveHistorySize() == obj2.getMoveHistorySize())
             {
-                if(obj1 instanceof King)
-                {
-                    return -1;
-                }
-                if(obj2 instanceof King)
-                {
-                    return 1;
-                }
-                return obj1.getName().compareTo(obj2.getName());
+                return obj1.getId() - obj2.getId();
             }
             return obj1.getMoveHistorySize() - obj2.getMoveHistorySize();
         }
@@ -453,20 +439,12 @@ public class GameLogic implements PlayableLogic{
         public int compare(ConcretePiece obj1, ConcretePiece obj2) {
             if((obj1).getDistanceTraveled() == (obj2).getDistanceTraveled())
             {
-                if(obj1.getOwner()!=obj2.getOwner())
+                if(obj1.getId()==obj2.getId())
                 {
-                    return obj1.getOwner()==victor?-1:1;
+                    return obj1.getOwner()==victor?1:-1;
                 }
                 else{
-                    if(obj1 instanceof King)
-                    {
-                        return 1;
-                    }
-                    if(obj2 instanceof King)
-                    {
-                        return -1;
-                    }
-                    return obj2.getName().compareTo(obj1.getName());
+                    return obj2.getId() - obj1.getId();
                 }
             }
             return ((obj1).getDistanceTraveled() - (obj2).getDistanceTraveled());
@@ -484,12 +462,12 @@ public class GameLogic implements PlayableLogic{
             }
             if(((Pawn)obj1).getKillCounter() == ((Pawn)obj2).getKillCounter())
             {
-                if(obj1.getOwner()!=obj2.getOwner())
+                if(obj1.getId()==obj2.getId())
                 {
                     return obj1.getOwner()==victor?1:-1;
                 }
                 else{
-                    return obj1.getName().compareTo(obj2.getName());
+                    return obj2.getId() - obj1.getId();
                 }
             }
             return ((Pawn)obj1).getKillCounter() - ((Pawn)obj2).getKillCounter();

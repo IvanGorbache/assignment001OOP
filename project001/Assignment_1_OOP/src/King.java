@@ -1,7 +1,7 @@
 public class King extends ConcretePiece{
-    public King(String newName, Player newOwner,Position startingPosition)
+    public King(String newName, int newId, Player newOwner,Position startingPosition)
     {
-        super(newName,"♔",newOwner,startingPosition);
+        super(newName, newId,"♔",newOwner,startingPosition);
 
     }
 }

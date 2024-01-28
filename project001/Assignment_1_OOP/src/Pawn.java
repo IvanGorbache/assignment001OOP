@@ -1,9 +1,9 @@
 public class Pawn extends ConcretePiece{
     private int killCounter;
 
-    public Pawn(String newName, Player newOwner, Position startingPosition)
+    public Pawn(String newName, int newId ,Player newOwner, Position startingPosition)
     {
-        super(newName,newOwner.isPlayerOne()?"♙":"♟",newOwner,startingPosition);
+        super(newName, newId ,newOwner.isPlayerOne()?"♙":"♟",newOwner,startingPosition);
         this.killCounter = 0;
     }
 
