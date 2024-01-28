@@ -36,14 +36,19 @@ public abstract class ConcretePiece implements Piece{
         calculateDistance(pos,true);
         this.moveHistory.push(pos);
     }
-    public void removeLastMove()
+    //removing the last position from the move history and returning it
+    public Position removeLastMove()
     {
         if(!this.moveHistory.isEmpty())
         {
+            Position position = moveHistory.peek();
             calculateDistance(this.moveHistory.pop(),false);
+            return position;
         }
+        return null;
     }
 
+    //Calculating distance between points in the move history.
     private void calculateDistance(Position pos, boolean add)
     {
         Position lastMove = this.moveHistory.peek();

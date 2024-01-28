@@ -45,24 +45,21 @@ public class Position {
         return uniquePieces;
     }
 
-    public boolean addUniquePieces(ConcretePiece piece) {
+    public void addUniquePieces(ConcretePiece piece) {
         if (uniquePieces == null)
         {
             uniquePieces = new ArrayList<>();
         }
-        if(!uniquePieces.contains(piece))
-        {
+        if(piece != null && !uniquePieces.contains(piece)) {
             uniquePieces.add(piece);
-            return true;
         }
-        return false;
     }
 
-    public void removePiece()
+    public void removePiece(ConcretePiece piece)
     {
-        if(uniquePieces!=null && !uniquePieces.isEmpty())
+        if(uniquePieces!=null)
         {
-            uniquePieces.remove(uniquePieces.get(uniquePieces.size()-1));
+            uniquePieces.remove(piece);
         }
     }
 }
