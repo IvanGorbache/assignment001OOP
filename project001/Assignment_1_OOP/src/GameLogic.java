@@ -40,20 +40,6 @@ public class GameLogic implements PlayableLogic{
     //The minimum for attacks is 2 because a minimum of 3 is required to capture a king
     private int attackerCount, defenderCount;
 
-    private final String field =
-            """
-                    00022222000
-                    00000200000
-                    00000000000
-                    20000100002
-                    20001110002
-                    22011311022
-                    20001110002
-                    20000100002
-                    00000000000
-                    00000200000
-                    00022222000""";
-
     //The constructor takes in no variables and creates all that is needed to start a game
     public GameLogic()
     {
@@ -95,7 +81,19 @@ public class GameLogic implements PlayableLogic{
         //Creating all the pieces and spreading them on the board
         int i = 0;
         int j = 0;
-        for(char c:field.toCharArray())
+        String field = """
+                00022222000
+                00000200000
+                00000000000
+                20000100002
+                20001110002
+                22011311022
+                20001110002
+                20000100002
+                00000000000
+                00000200000
+                00022222000""";
+        for(char c: field.toCharArray())
         {
             switch (c)
             {
@@ -130,35 +128,6 @@ public class GameLogic implements PlayableLogic{
         getAllPositionsStart();
 
         //testPrint();
-    }
-    private void testPrint()
-    {
-        for (int i=0;i<getBoardSize();i++)
-        {
-            for (int j = 0;j<getBoardSize();j++)
-            {
-                if(board[i][j]==null)
-                {
-                    System.out.print("0");
-                }
-                else if (board[i][j] instanceof Pawn)
-                {
-                    if(board[i][j].getOwner().isPlayerOne())
-                    {
-                        System.out.print("1");
-                    }
-                    else
-                    {
-                        System.out.print("2");
-                    }
-                }
-                else
-                {
-                    System.out.print("3");
-                }
-            }
-            System.out.println("\\n");
-        }
     }
     private  void addStartPos()
     {
