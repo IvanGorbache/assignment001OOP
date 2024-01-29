@@ -62,6 +62,9 @@ public class GameLogic implements PlayableLogic{
     }
 
     //Creating the board along with the stacks used to store historical data related to the board.
+    //Inputs: None
+    //Outputs: None
+    //Function: Creates the 2D array of ConcretePieces that represents the board along with the stacks that represent historical data
     private void createBoard() {
         //Resetting the Ids of attackers and defenders when starting a new game
         ConcretePiece.resetID();
@@ -75,6 +78,9 @@ public class GameLogic implements PlayableLogic{
 
         //Initializing  a 2D array for keeping track of the number of unique pieces that stepped on each tile
         uniqueSteps = new Position[getBoardSize()][getBoardSize()];
+
+        //Creating an arraylist that contains all pieces
+        allPieces = new ArrayList<>();
 
         //Initializing  the board
         board = new ConcretePiece[getBoardSize()][getBoardSize()];
@@ -107,17 +113,17 @@ public class GameLogic implements PlayableLogic{
             {
                 //1 - Defender Pawn
                 case '1':
-                    board[i][j] = new Pawn(playerOneDefend);
+                    createPiece(i,j,playerOneDefend,false);
                     i++;
                     break;
                 //2 - Attacker Pawn
                 case '2':
-                    board[i][j] = new Pawn(playerTwoAttack);
+                    createPiece(i,j,playerTwoAttack,false);
                     i++;
                     break;
                 //3 - King
                 case '3':
-                    board[i][j] = new King(playerOneDefend);
+                    createPiece(i,j,playerOneDefend,true);
                     i++;
                     break;
                  //Moving down a line
@@ -133,54 +139,24 @@ public class GameLogic implements PlayableLogic{
                     break;
             }
         }
-
-        //Adding the starting position of the piece to its move history
-        addStartPos();
-
-        //Gathering all the pieces to an arraylist for printing statistics
-        getAllPieces();
-
-        //Initializing all the positions that have a piece in them at the start
-        getAllPositionsStart();
     }
-
-    //Adds the starting position of the piece to its move history
-    private  void addStartPos()
+    //Creates a new piece to add to the board given its starting position, owner and whether it's a king or not
+    private void createPiece(int i,int j, ConcretePlayer player, boolean isKing)
     {
+        board[i][j] = isKing? new King(player): new Pawn(player);
 
-        //Iterating over all the entries in the board
-        for (int i=0;i<getBoardSize();i++)
-        {
-            for (int j = 0;j<getBoardSize();j++)
-            {
-                //Only adding moves to pieces in positions on the board that aren't empty
-                if(board[i][j]!=null)
-                {
-                    board[i][j].addMove(new Position(i,j));
-                }
-            }
-        }
+        allPieces.add(board[i][j]);
+        board[i][j].addMove(new Position(i,j));
+
+        uniqueSteps[i][j] = new Position(i,j);
+
+        //Adding the piece in that location to the arraylist of unique piece in that position
+        uniqueSteps[i][j].addUniquePieces(board[i][j]);
     }
-    //Gathering all the pieces to an arraylist for printing statistics
-    private void getAllPieces()
-    {
-        this.allPieces = new ArrayList<>();
-
-        //Iterating over all the entries in the board
-        for (int i=0;i<getBoardSize();i++)
-        {
-            for (int j = 0;j<getBoardSize();j++)
-            {
-                //Only adding pieces from positions on the board that aren't empty
-                if(board[i][j]!=null)
-                {
-                    allPieces.add(board[i][j]);
-                }
-            }
-        }
-    }
-
     //Gathering all the positions that were stepped on to an arraylist for printing statistics
+    //Inputs: None
+    //Outputs: None
+    //Function: Iterates over the 2D array of uniqueSteps and gathers all the positions that aren't null
     private void getAllPositions()
     {
         this.allPositions = new ArrayList<>();
@@ -195,27 +171,6 @@ public class GameLogic implements PlayableLogic{
                 {
                     //Adding it to the arraylist for sorting
                     allPositions.add(uniqueSteps[i][j]);
-                }
-            }
-        }
-    }
-
-    //Initializing all the positions that have a piece in them at the start
-    private void getAllPositionsStart()
-    {
-        //Iterating over all the entries in the board
-        for (int i=0;i<getBoardSize();i++)
-        {
-            for (int j = 0;j<getBoardSize();j++)
-            {
-                //Only adding pieces from positions on the board that aren't empty
-                if(board[i][j]!=null)
-                {
-                    //Creating a new position
-                    uniqueSteps[i][j] = new Position(i,j);
-
-                    //Adding the piece in that location to the arraylist of unique piece in that position
-                    uniqueSteps[i][j].addUniquePieces(board[i][j]);
                 }
             }
         }
