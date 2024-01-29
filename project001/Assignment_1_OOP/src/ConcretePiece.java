@@ -3,16 +3,16 @@ import java.util.Stack;
 public abstract class ConcretePiece implements Piece{
 
     //The name of the piece. (A - Attacker, D - Defender, K - King)
-    private final String name;
+    private String name;
 
     //The id of the piece
-    private final int id;
+    private int id;
 
     //The type of the piece (♔ ♙ ♟)
-    private final String type;
+    private String type;
 
     //The player that owns the piece
-    private final Player owner;
+    private Player owner;
 
     //The total distance that the piece has traveled throughout the duration of the game
     private int distanceTraveled;
@@ -20,18 +20,31 @@ public abstract class ConcretePiece implements Piece{
     //A stack used to store the positions the piece has traveled to
     private final Stack<Position> moveHistory;
 
+    private static int attackerID = 1;
+    private static int defenderID = 1;
+
     //Constructor
-    public ConcretePiece(String newName, int newId, String newType, Player newOwner, Position startingPos)
+    public ConcretePiece()
     {
-        this.name = newName;
-        this.id =newId;
-        this.type = newType;
-        this.owner = newOwner;
         this.moveHistory = new Stack<>();
-        this.moveHistory.add(startingPos);
         this.distanceTraveled = 0;
     }
-
+    public void setId()
+    {
+        this.id = this.owner.isPlayerOne()?defenderID++:attackerID++;
+    }
+    public void setOwner(Player newOwner)
+    {
+        this.owner = newOwner;
+    }
+    public void setName(String newName)
+    {
+        this.name = newName;
+    }
+    public void setType(String newType)
+    {
+        this.type = newType;
+    }
     //A getter for the owner of the piece
     @Override
     public Player getOwner() {
@@ -79,9 +92,12 @@ public abstract class ConcretePiece implements Piece{
     //False - sub the new distance from the total distance (used for undo)
     private void calculateDistance(Position pos, boolean add)
     {
-        Position lastMove = this.moveHistory.peek();
-        int newDistance = Math.abs(pos.getX() - lastMove.getX()) + Math.abs(pos.getY() - lastMove.getY());
-        this.distanceTraveled += add?newDistance:-newDistance;
+        if(!moveHistory.isEmpty())
+        {
+            Position lastMove = this.moveHistory.peek();
+            int newDistance = Math.abs(pos.getX() - lastMove.getX()) + Math.abs(pos.getY() - lastMove.getY());
+            this.distanceTraveled += add?newDistance:-newDistance;
+        }
     }
 
     //A getter for the total distanceTraveled by the piece
@@ -104,5 +120,11 @@ public abstract class ConcretePiece implements Piece{
     //A getter for the id of the piece
     public int getId() {
         return id;
+    }
+
+    public static void resetID()
+    {
+        defenderID = 1;
+        attackerID = 1;
     }
 }

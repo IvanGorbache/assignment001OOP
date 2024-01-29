@@ -14,8 +14,8 @@ class GameLogicTest {
         public record ComparisonData(File inputFile, File outputFile) {}
         // Define the source for parameterized tests
         static Stream<ComparisonData> comparisonData() {
-            File inputDirectory = new File("src/test/resources/inputs");
-            File outputDirectory = new File("src/test/resources/outputs");
+            File inputDirectory = new File("project001/Assignment_1_OOP/src/test/resources/inputs");
+            File outputDirectory = new File("project001/Assignment_1_OOP/src/test/resources/outputs");
 
             if (!inputDirectory.exists() || !outputDirectory.exists()) {
                 fail("Input or output directory not found");

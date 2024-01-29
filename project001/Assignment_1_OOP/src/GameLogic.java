@@ -40,6 +40,20 @@ public class GameLogic implements PlayableLogic{
     //The minimum for attacks is 2 because a minimum of 3 is required to capture a king
     private int attackerCount, defenderCount;
 
+    private final String field =
+            """
+                    00022222000
+                    00000200000
+                    00000000000
+                    20000100002
+                    20001110002
+                    22011311022
+                    20001110002
+                    20000100002
+                    00000000000
+                    00000200000
+                    00022222000""";
+
     //The constructor takes in no variables and creates all that is needed to start a game
     public GameLogic()
     {
@@ -63,7 +77,7 @@ public class GameLogic implements PlayableLogic{
 
     //Creating the board along with the stacks used to store historical data related to the board.
     private void createBoard() {
-
+        ConcretePiece.resetID();
         //Called here because finishing a game restarts the board
         isGameOver = false;
 
@@ -78,53 +92,88 @@ public class GameLogic implements PlayableLogic{
         //Initializing  the board
         board = new ConcretePiece[getBoardSize()][getBoardSize()];
 
-        //The struggle itself towards the heights is enough to fill a man's heart. One must imagine Sisyphus happy.
         //Creating all the pieces and spreading them on the board
-        board[3][0] = new Pawn("A",1, playerTwoAttack, new Position(3,0));
-        board[4][0] = new Pawn("A",2,  playerTwoAttack, new Position(4,0));
-        board[5][0] = new Pawn("A",3, playerTwoAttack, new Position(5,0));
-        board[6][0] = new Pawn("A", 4,playerTwoAttack, new Position(6,0));
-        board[7][0] = new Pawn("A", 5,playerTwoAttack, new Position(7,0));
-        board[5][1] = new Pawn("A", 6,playerTwoAttack, new Position(5,1));
-        board[0][3] = new Pawn("A", 7,playerTwoAttack, new Position(0,3));
-        board[10][3] = new Pawn("A", 8,playerTwoAttack, new Position(10,3));
-        board[0][4] = new Pawn("A", 9,playerTwoAttack, new Position(0,4));
-        board[10][4] = new Pawn("A", 10,playerTwoAttack, new Position(10,4));
-        board[0][5] = new Pawn("A", 11,playerTwoAttack, new Position(0,5));
-        board[1][5] = new Pawn("A", 12,playerTwoAttack, new Position(1,5));
-        board[9][5] = new Pawn("A", 13,playerTwoAttack, new Position(9,5));
-        board[10][5] = new Pawn("A", 14,playerTwoAttack, new Position(10,5));
-        board[0][6] = new Pawn("A", 15,playerTwoAttack, new Position(0,6));
-        board[10][6] = new Pawn("A", 16,playerTwoAttack, new Position(10,6));
-        board[0][7] = new Pawn("A", 17,playerTwoAttack, new Position(0,7));
-        board[10][7] = new Pawn("A", 18,playerTwoAttack, new Position(10,7));
-        board[5][9] = new Pawn("A", 19,playerTwoAttack, new Position(5,9));
-        board[3][10] = new Pawn("A", 20,playerTwoAttack, new Position(3,10));
-        board[4][10] = new Pawn("A", 21,playerTwoAttack, new Position(4,10));
-        board[5][10] = new Pawn("A", 22,playerTwoAttack, new Position(5,10));
-        board[6][10] = new Pawn("A", 23,playerTwoAttack, new Position(6,10));
-        board[7][10] = new Pawn("A", 24,playerTwoAttack, new Position(7,10));
-        board[5][3] = new Pawn("D",1, playerOneDefend, new Position(5,3));
-        board[4][4] = new Pawn("D",2, playerOneDefend, new Position(4,4));
-        board[5][4] = new Pawn("D", 3,playerOneDefend, new Position(5,4));
-        board[6][4] = new Pawn("D", 4,playerOneDefend, new Position(6,4));
-        board[3][5] = new Pawn("D", 5,playerOneDefend, new Position(3,5));
-        board[4][5] = new Pawn("D", 6,playerOneDefend, new Position(4,5));
-        board[5][5] = new King("K", 7,playerOneDefend, new Position(5,5));
-        board[6][5] = new Pawn("D", 8,playerOneDefend, new Position(6,5));
-        board[7][5] = new Pawn("D", 9,playerOneDefend, new Position(7,5));
-        board[4][6] = new Pawn("D", 10,playerOneDefend, new Position(4,6));
-        board[5][6] = new Pawn("D", 11,playerOneDefend, new Position(5,6));
-        board[6][6] = new Pawn("D", 12,playerOneDefend, new Position(6,6));
-        board[5][7] = new Pawn("D", 13,playerOneDefend, new Position(5,7));
+        int i = 0;
+        int j = 0;
+        for(char c:field.toCharArray())
+        {
+            switch (c)
+            {
+                case '1':
+                    board[i][j] = new Pawn(playerOneDefend);
+                    i++;
+                    break;
+                case '2':
+                    board[i][j] = new Pawn(playerTwoAttack);
+                    i++;
+                    break;
+                case '3':
+                    board[i][j] = new King(playerOneDefend);
+                    i++;
+                    break;
+                case '\n':
+                    j++;
+                    i = 0;
+                    break;
+                default:
+                    i++;
+                    break;
+            }
+        }
+
+        addStartPos();
 
         //Gathering all the pieces to an arraylist for printing statistics
         getAllPieces();
 
         //Initializing all the positions that have a piece in them at the start
         getAllPositionsStart();
-    }
 
+        //testPrint();
+    }
+    private void testPrint()
+    {
+        for (int i=0;i<getBoardSize();i++)
+        {
+            for (int j = 0;j<getBoardSize();j++)
+            {
+                if(board[i][j]==null)
+                {
+                    System.out.print("0");
+                }
+                else if (board[i][j] instanceof Pawn)
+                {
+                    if(board[i][j].getOwner().isPlayerOne())
+                    {
+                        System.out.print("1");
+                    }
+                    else
+                    {
+                        System.out.print("2");
+                    }
+                }
+                else
+                {
+                    System.out.print("3");
+                }
+            }
+            System.out.println("\\n");
+        }
+    }
+    private  void addStartPos()
+    {
+        for (int i=0;i<getBoardSize();i++)
+        {
+            for (int j = 0;j<getBoardSize();j++)
+            {
+                //Only adding pieces from positions on the board that aren't empty
+                if(board[i][j]!=null)
+                {
+                    board[i][j].addMove(new Position(i,j));
+                }
+            }
+        }
+    }
     //Gathering all the pieces to an arraylist for printing statistics
     private void getAllPieces()
     {

@@ -4,11 +4,13 @@ public class Pawn extends ConcretePiece{
     private int killCounter;
 
     //Constructor with parameters to construct the super class, ConcretePiece
-    public Pawn(String newName, int newId ,Player newOwner, Position startingPosition)
+    public Pawn(Player newOwner)
     {
         //Using the given parameters to construct a ConcretePiece
-        super(newName, newId ,newOwner.isPlayerOne()?"♙":"♟",newOwner,startingPosition);
-
+        this.setName(newOwner.isPlayerOne()?"D":"A");
+        this.setType(newOwner.isPlayerOne()?"♙":"♟");
+        this.setOwner(newOwner);
+        this.setId();
         //Setting the killCounter to 0
         this.killCounter = 0;
     }
