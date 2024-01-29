@@ -146,6 +146,8 @@ public class GameLogic implements PlayableLogic{
     private void getAllPositions()
     {
         this.allPositions = new ArrayList<>();
+
+        //Iterating over all the entries in the board
         for (int i=0;i<getBoardSize();i++)
         {
             for (int j = 0;j<getBoardSize();j++)
@@ -153,6 +155,7 @@ public class GameLogic implements PlayableLogic{
                 //Gathering all the positions that were stepped on
                 if(uniqueSteps[i][j]!=null)
                 {
+                    //Adding it to the arraylist for sorting
                     allPositions.add(uniqueSteps[i][j]);
                 }
             }
@@ -162,6 +165,7 @@ public class GameLogic implements PlayableLogic{
     //Initializing all the positions that have a piece in them at the start
     private void getAllPositionsStart()
     {
+        //Iterating over all the entries in the board
         for (int i=0;i<getBoardSize();i++)
         {
             for (int j = 0;j<getBoardSize();j++)
@@ -169,7 +173,10 @@ public class GameLogic implements PlayableLogic{
                 //Only adding pieces from positions on the board that aren't empty
                 if(board[i][j]!=null)
                 {
+                    //Creating a new position
                     uniqueSteps[i][j] = new Position(i,j);
+
+                    //Adding the piece in that location to the arraylist of unique piece in that position
                     uniqueSteps[i][j].addUniquePieces(board[i][j]);
                 }
             }
@@ -223,9 +230,12 @@ public class GameLogic implements PlayableLogic{
             //For the special case where the attacking team is too small to capture the king
             if(attackerCount == 2)
             {
-                //In that case the defender wins
+                //If the king escaped, the victor is the defender
                 victor = playerOneDefend;
                 isGameOver = true;
+                //Adding a win to the defending team
+                playerOneDefend.addWin();
+                //Printing the statistics
                 printStatistics();
             }
 
@@ -239,19 +249,29 @@ public class GameLogic implements PlayableLogic{
     //Used to copy the current state of the board and push it to a stack
     private void updateHistory() {
         ConcretePiece[][] copyBoard = new ConcretePiece[getBoardSize()][getBoardSize()];
+        //Iterating over all the entries in the board
         for (int i = 0; i < getBoardSize(); i++) {
+            //Copying the array to the CopyBoard
             System.arraycopy(this.board[i], 0, copyBoard[i], 0, getBoardSize());
         }
+        //Adding CopyBoard to the history
         history.push(copyBoard);
     }
 
     //checking if the king has reach one of the four corners of the map
     private void checkEscape(Position pos)
     {
+        //Checks if the king has reached any of the edges
         isGameOver = getPieceAtPosition(pos) instanceof King && isEdge(pos);
+
+        //Checks if the game is over after the check
         if(isGameOver)
         {
+            //If the king escaped, the victor is the defender
             victor = playerOneDefend;
+            //Adding a win to the defending team
+            playerOneDefend.addWin();
+            //Printing the statistics
             printStatistics();
         }
     }
@@ -294,9 +314,15 @@ public class GameLogic implements PlayableLogic{
 
         //used to calculate the difference in position between a and b and whether we need to add or subtract to reach the desired position
         int xSign, ySign, xDiff, yDiff;
+
+        //Setting the starting point of our check to be a
         temp = new Position(a);
+
+        //Calculating the difference between position a and b
         xDiff = temp.getX() - b.getX();
         yDiff = temp.getY() - b.getY();
+
+        //Calculating whether we should add, subtract or do nothing to the coordinates to reach the destination
         xSign = xDiff != 0 ? -(xDiff) / Math.abs(xDiff) : 0;
         ySign = yDiff != 0 ? -(yDiff) / Math.abs(yDiff) : 0;
 
@@ -309,9 +335,11 @@ public class GameLogic implements PlayableLogic{
 
             //Checking that the position is empty
             if (getPieceAtPosition(temp) != null) {
+                //returning false if we encounter a piece between point a and point b
                 return false;
             }
         }
+        //returning true if the path between point a and point b is clear
         return true;
     }
 
@@ -324,18 +352,23 @@ public class GameLogic implements PlayableLogic{
     //Checking if the position is one of the four corners of the board
     public boolean isEdge(Position pos)
     {
+        //Array of the corners of the map [(0,0), (10,10), (0,10), (10,0)]
         Position[] edgeSquare = new Position[]{
                 new Position(0, 0),
                 new Position(10, 10),
                 new Position(0, 10),
                 new Position(10, 0)};
+        //Iterating over the array of position to check if our given pos is one of them
         for (Position tempPos:edgeSquare)
         {
+            //Comparing our give pos to one of the corners
             if ((tempPos.getX() == pos.getX())&&(tempPos.getY() == pos.getY()))
             {
+                //Returning true if the given pos is a corner
                 return true;
             }
         }
+        //Returning false if the given pos isn't a corner
         return false;
     }
 
@@ -373,9 +406,16 @@ public class GameLogic implements PlayableLogic{
                 } else if ((getPieceAtPosition(target) instanceof King)) {
                     //checking if the king is surrounded
                     isGameOver = isKingSurrounded(target);
+                    //If the king is surrounded
                     if(isGameOver)
                     {
+                        //The victor is the attacker
                         victor = playerTwoAttack;
+
+                        //Adding a win to the attacking team
+                        playerTwoAttack.addWin();
+
+                        //Printing the statistics
                         printStatistics();
                     }
                 }
@@ -386,14 +426,18 @@ public class GameLogic implements PlayableLogic{
     //Calculating the position opposite to the attack relative to the taget
     private Position getOppositePosition(Position attacker, Position target)
     {
+        //Calculating the coordinates of the opposite position to the attacker relative to the target
         int newX = target.getX() + (target.getX() - attacker.getX());
         int newY = target.getY() + (target.getY() - attacker.getY());
+
+        //returning the result
         return new Position(newX, newY);
     }
 
     //Checking if an attack is possible
     private boolean canAttack(Position attacker, Position target)
     {
+        //Checking if the given target is occupied and hostile to us (of a different team)
         return isPositionOccupied(target) && isTargetHostile(attacker,target);
     }
 
@@ -412,6 +456,7 @@ public class GameLogic implements PlayableLogic{
     //Gathering all the positions surrounding a position
     private Position[] getSurroundingAreas(Position pos)
     {
+        //Returning the positions north, south, west and east of our given pos
         return new Position[]{
                 new Position(pos.getX() + 1, pos.getY()),
                 new Position(pos.getX() - 1, pos.getY()),
@@ -422,25 +467,35 @@ public class GameLogic implements PlayableLogic{
 
     //Checking if a position is inside the map
     private boolean inMapRange(Position pos) {
+        //Getting the size of the board
         int mapSize = getBoardSize();
+
+        //Checking if the give pos falls within the bounds of our board
         return (pos.getX() < mapSize && pos.getX() >= 0) && (pos.getY() < mapSize && pos.getY() >= 0);
     }
 
     //checking if a pawn is surrounded with another pawn or wall
     private boolean isPawnSurrounded(Position target, Position attacker) {
+        //Getting the position opposite to the attack relative to the taget
         Position pos = getOppositePosition(attacker,target);
+
+        //Checking if the pos is an edge, or outside the map, or a hostile pawn
         return isEdge(pos) || (!inMapRange(pos)) || (isPositionOccupied(pos) && isTargetHostile(pos,target) && (!(getPieceAtPosition(pos) instanceof King)));
     }
 
     //checking if a king a surrounded from all sides
     private boolean isKingSurrounded(Position target) {
+        //Getting all the positions around the king
         Position[] directions = getSurroundingAreas(target);
+
+        //Iterating over the positions around the king
         for (Position pos : directions) {
+            //If one of the positions is inside the map and either empty or non-hostile
             if ((inMapRange(pos)) && ((getPieceAtPosition(pos) == null) || (!isTargetHostile(pos,target)))){
                 return false;
             }
         }
-        playerTwoAttack.addWin();
+        //If at least three positions are occupied by hostile pawns, the attacking player wins
         return true;
     }
 
@@ -489,7 +544,6 @@ public class GameLogic implements PlayableLogic{
             //Removing the piece from the unique step counter of the tile it was on
             uniqueSteps[p.getX()][p.getY()].removePiece(piecesHistory.pop());
         }
-
         //checking if the history is empty
         if(!history.isEmpty())
         {
@@ -506,6 +560,7 @@ public class GameLogic implements PlayableLogic{
             //if it's a separation, we pop it
             if(attackHistory.peek()==null)
             {
+                //Removing the null padding
                 attackHistory.pop();
             }
             else
@@ -514,6 +569,8 @@ public class GameLogic implements PlayableLogic{
                 //a loop is used for cases where a piece might get more than a single kill
                 while (attackHistory.peek()!=null)
                 {
+                    //Removing a kill from the kill counter.
+                    //The casting is safe because we only enter pawns to the attack history
                     ((Pawn)attackHistory.pop()).modifyKillCounter(false);
                 }
             }
@@ -530,9 +587,13 @@ public class GameLogic implements PlayableLogic{
         //Printing all the pieces that made at least 2 steps
         for (ConcretePiece piece: allPieces)
         {
+            //Getting the size of the move history
             size = piece.getMoveHistorySize();
+
+            //Printing only pieces that moved more than once
             if (size>=2)
             {
+                //Printing the move history
                 System.out.print(piece.getName()+": [");
                 for (Position position: piece.getMoveHistory())
                 {
@@ -545,6 +606,8 @@ public class GameLogic implements PlayableLogic{
                 System.out.println("]");
             }
         }
+
+        //Separating with stars
         printStars();
 
         //Sorting all the pieces based on the number of kills they have
@@ -553,39 +616,55 @@ public class GameLogic implements PlayableLogic{
         //Printing all the pieces that have at least one kill to their name
         for (ConcretePiece piece: allPieces)
         {
+            //Printing only pawns because only they are capable of killing
             if(piece instanceof Pawn)
             {
+                //Getting the kill counter of the pawn
                 killCount = ((Pawn)piece).getKillCounter();
+
+                //Printing pawns that have at least one kill to their name
                 if(killCount>0)
                 {
                     System.out.println(piece.getName()+": "+killCount+" kills");
                 }
             }
         }
+
+        //Separating with stars
         printStars();
 
         //Sorting all the pieces based on the distance they traveled
         allPieces.sort(new DistanceComparator().reversed());
         for (ConcretePiece piece: allPieces)
         {
+            //getting the distance traveled by the piece
             size = piece.getDistanceTraveled();
+
+            //Only printing pieces that traveled
             if(size>0)
             {
                 System.out.println(piece.getName()+": "+size+" squares");
             }
         }
+
+        //Separating with stars
         printStars();
+
+        //Gathering all the positions that were stepped on over the duration of the game
         getAllPositions();
 
         //Sorting all the positions based on the number of unique pieces that stepped on them
         allPositions.sort(new UniquePiecesComparator());
         for (Position position: allPositions)
         {
+            //Only printing positions that had more than one unique piece step on them
             if(position.getUniquePieces().size()>1)
             {
                 System.out.println(position.toString()+position.getUniquePieces().size()+" pieces");
             }
         }
+
+        //Separating with stars
         printStars();
     }
     static class StepsComparator implements Comparator<ConcretePiece>

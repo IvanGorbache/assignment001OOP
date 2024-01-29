@@ -101,7 +101,7 @@ public abstract class ConcretePiece implements Piece{
         return this.moveHistory;
     }
 
-    //A getter for the id of the peice
+    //A getter for the id of the piece
     public int getId() {
         return id;
     }
