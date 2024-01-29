@@ -7,6 +7,5 @@ public class King extends ConcretePiece{
         this.setOwner(newOwner);
         this.setType("♔");
         this.setName("K");
-        setId();
     }
 }

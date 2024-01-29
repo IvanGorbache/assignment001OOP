@@ -63,6 +63,7 @@ public class GameLogic implements PlayableLogic{
 
     //Creating the board along with the stacks used to store historical data related to the board.
     private void createBoard() {
+        //Resetting the Ids of attackers and defenders when starting a new game
         ConcretePiece.resetID();
         //Called here because finishing a game restarts the board
         isGameOver = false;
@@ -81,6 +82,12 @@ public class GameLogic implements PlayableLogic{
         //Creating all the pieces and spreading them on the board
         int i = 0;
         int j = 0;
+
+        //A string representing the arrangement of pieces on the board
+        //0 - empty space
+        //1 - defender pawn
+        //2 - attacker pawn
+        //3 - king
         String field = """
                 00022222000
                 00000200000
@@ -93,32 +100,41 @@ public class GameLogic implements PlayableLogic{
                 00000000000
                 00000200000
                 00022222000""";
+        //Iterating over the String
         for(char c: field.toCharArray())
         {
             switch (c)
             {
+                //1 - Defender Pawn
                 case '1':
                     board[i][j] = new Pawn(playerOneDefend);
                     i++;
                     break;
+                //2 - Attacker Pawn
                 case '2':
                     board[i][j] = new Pawn(playerTwoAttack);
                     i++;
                     break;
+                //3 - King
                 case '3':
                     board[i][j] = new King(playerOneDefend);
                     i++;
                     break;
+                 //Moving down a line
                 case '\n':
+                    //Moving down a line
                     j++;
+                    //Resting the position to the start
                     i = 0;
                     break;
+                 //Empty space
                 default:
                     i++;
                     break;
             }
         }
 
+        //Adding the starting position of the piece to its move history
         addStartPos();
 
         //Gathering all the pieces to an arraylist for printing statistics
@@ -126,16 +142,18 @@ public class GameLogic implements PlayableLogic{
 
         //Initializing all the positions that have a piece in them at the start
         getAllPositionsStart();
-
-        //testPrint();
     }
+
+    //Adds the starting position of the piece to its move history
     private  void addStartPos()
     {
+
+        //Iterating over all the entries in the board
         for (int i=0;i<getBoardSize();i++)
         {
             for (int j = 0;j<getBoardSize();j++)
             {
-                //Only adding pieces from positions on the board that aren't empty
+                //Only adding moves to pieces in positions on the board that aren't empty
                 if(board[i][j]!=null)
                 {
                     board[i][j].addMove(new Position(i,j));
@@ -147,6 +165,8 @@ public class GameLogic implements PlayableLogic{
     private void getAllPieces()
     {
         this.allPieces = new ArrayList<>();
+
+        //Iterating over all the entries in the board
         for (int i=0;i<getBoardSize();i++)
         {
             for (int j = 0;j<getBoardSize();j++)

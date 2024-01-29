@@ -10,7 +10,7 @@ public class Pawn extends ConcretePiece{
         this.setName(newOwner.isPlayerOne()?"D":"A");
         this.setType(newOwner.isPlayerOne()?"♙":"♟");
         this.setOwner(newOwner);
-        this.setId();
+
         //Setting the killCounter to 0
         this.killCounter = 0;
     }

@@ -29,22 +29,34 @@ public abstract class ConcretePiece implements Piece{
         this.moveHistory = new Stack<>();
         this.distanceTraveled = 0;
     }
+
+    //Setting the id of the owner
     public void setId()
     {
         this.id = this.owner.isPlayerOne()?defenderID++:attackerID++;
     }
+
+    //Setting the owner of the piece
     public void setOwner(Player newOwner)
     {
         this.owner = newOwner;
+
+        //Setting the id only after we get a new owner
+        setId();
     }
+
+    //Setting the name of the piece
     public void setName(String newName)
     {
         this.name = newName;
     }
+
+    //Setting the type of the piece
     public void setType(String newType)
     {
         this.type = newType;
     }
+
     //A getter for the owner of the piece
     @Override
     public Player getOwner() {
